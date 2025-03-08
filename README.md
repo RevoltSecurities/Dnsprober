@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="static/dnsprober.png" alt="dnsx" height="500px" width="500px">
+  <img src="static/dnsprober.png" alt="dnsprober" height="500px" width="500px">
   <br>
 </h1>
 
