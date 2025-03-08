@@ -3,20 +3,23 @@
   <br>
 </h1>
 
-<h4 align="center">Dnsprober - A concurrent,lightweight,scalable and efficient DNS reconnaissance tool</h4>
+<h4 align="center">Dnsprober - A concurrent, lightweight, scalable, and efficient DNS reconnaissance too</h4>
 
 <div align="center">
   
-![GitHub last commit](https://img.shields.io/github/last-commit/RevoltSecurities/Dnsprober)  ![GitHub release (latest by date)](https://img.shields.io/github/v/release/RevoltSecurities/Dnsprober)  [![GitHub license](https://img.shields.io/github/license/RevoltSecurities/Subprober)](https://github.com/RevoltSecurities/Dnsprober/blob/main/LICENSE) 
+![GitHub last commit](https://img.shields.io/github/last-commit/RevoltSecurities/Dnsprober)  ![GitHub release (latest by date)](https://img.shields.io/github/v/release/RevoltSecurities/Dnsprober)  [![GitHub license](https://img.shields.io/github/license/RevoltSecurities/Dnsprober)](https://github.com/RevoltSecurities/Dnsprober/blob/main/LICENSE) 
 
 </div>
 
 <p align="center">
   <a href="https://github.com/RevoltSecurities/Dnsprober/edit/main/README.md#features">Features</a> |
-  <a href="https://github.com/RevoltSecurities/Dnsprober/edit/main/README.md#installtion">Installation</a> |
+  <a href="https://github.com/RevoltSecurities/Dnsprober/edit/main/README.md#installation">Installation</a> |
   <a href="#usage">Usage</a> |
   <a href="https://github.com/RevoltSecurities/Dnsprober/edit/main/README.md#using-dnsprober">Using Dnsprober</a> |
-  <a href="#wildcard-filtering">Wildcard Filtering</a> |
+  <a href="https://github.com/RevoltSecurities/Dnsprober/edit/main/README.md#wildcard-filteration">Wildcard Filteration</a> |
+  <a href="#reverse-dns-lookup">Reverse DNS</a> |
+  <a href="#dns-probe">DNS Probe</a> |
+  <a href="#info">Info</a>
 </p>
 
 ---
@@ -38,9 +41,9 @@
 - **DNS Response Filtering** – Filter results based on DNS response codes.
 
 
-## Installtion:
+## Installation:
 
-The installation process requires golang with version **go 1.23.4** and run the below command to install the **dnsprober** latest version:
+To install dnsprober, ensure you have Go **1.23.4** or later, then run the following command:
 
 ```bash
 go install -v github.com/RevoltSecurities/Dnsprober/dnsprober@latest
@@ -121,6 +124,7 @@ dnsprober -h
     [FILTERS]:  
 
         --response                      :  Display a summary of the DNS response along with the domain.
+        --dns-response                  :  Display the DNS records data of the resolved domain.
         --dns-code                      :  Filter output by specific DNS response codes (e.g., noerror, refused).
         --raw-response                  :  Display the complete raw DNS response (full packet details).
 		
@@ -136,7 +140,6 @@ dnsprober -h
         -s,  --silent                   :  Run in silent mode; suppress banner and version logging for cleaner output.
         --disable-update                :  Disable automatic update checks for the dnsprober.
         --no-color                      :  Disable colored output for run-time and outputs.
-
 ```
 
 ## Using Dnsprober:
@@ -297,3 +300,106 @@ x.com [SOA] [a.u10.twtrdns.net]
 x.com [SOA] [noc.twitter.com]
 ```
 
+## Wildcard Filteration:
+
+### Handling Wildcard DNS for Accurate Reconnaissance with dnsprober
+
+During active DNS reconnaissance, a common challenge arises when non-existent subdomains resolve to the same IP address, causing excessive false positives and cluttered results. This can severely impact the accuracy of subdomain enumeration.
+
+To tackle this, dnsprober includes a powerful wildcard filtering feature with the --wildcard-domain option. By specifying the wildcard domain name, dnsprober intelligently analyzes DNS responses, detects patterns, and filters out duplicate or misleading results. It uses a maximum threshold to determine if multiple subdomains resolve to the same IP address, confirming the presence of a wildcard domain.
+
+With dnsprober’s wildcard detection, you can focus on valid subdomains without sifting through irrelevant or falsely resolved entries. This ensures precise DNS reconnaissance, eliminating noise and improving the quality of discovered subdomains efficiently. 🚀
+
+```console
+dnsprober -d freshworks.com -w wordlist.txt --wildcard-domain wildcard-domain.freshworks.com
+
+feet.freshworks.com
+espo.freshworks.com
+gtest.freshworks.com
+household.freshworks.com
+larsen.freshworks.com
+monk.freshworks.com
+mvcc.freshworks.com
+```
+
+## Reverse DNS Lookup
+
+dnsprober supports **Reverse DNS Lookup** using the **PTR** query, allowing you to retrieve domain names associated with IP addresses. This helps in identifying hostnames linked to a given IP, aiding in reconnaissance and infrastructure mapping.
+
+```console
+prips 157.240.19.0/24 | dnsprober --ptr --response
+
+157.240.19.137 [PTR] [edgeray-avalanche-shv-01-dfw5.facebook.com]
+157.240.19.10 [PTR] [edge-fblite-tcp-p1-shv-01-dfw5.facebook.com]
+157.240.19.130 [PTR] [edgeray-biz-wa-shv-01-dfw5.facebook.com]
+157.240.19.12 [PTR] [edge-mqtt-shv-01-dfw5.facebook.com]
+157.240.19.140 [PTR] [edgeray-wa-genai-shv-01-dfw5.facebook.com]
+157.240.19.14 [PTR] [edge-secure-shv-01-dfw5.facebook.com]
+157.240.19.129 [PTR] [edgeray-cloudgaming-shv-01-dfw5.facebook.com]
+157.240.19.141 [PTR] [edgeray-latest-star-shv-01-dfw5.facebook.com]
+157.240.19.134 [PTR] [whatsapp-chatd-igd-edge-shv-01-dfw5.facebook.com]
+157.240.19.138 [PTR] [edge-mws-l-shv-01-dfw5.facebook.com]
+157.240.19.143 [PTR] [edge-ig-mqtt-shv-01-dfw5.facebook.com]
+157.240.19.1 [PTR] [livestream-edgetee-upload-shv-01-dfw5.facebook.com]
+157.240.19.135 [PTR] [edge-iglite-p3-shv-01-dfw5.facebook.com]
+157.240.19.11 [PTR] [edge-msgr-latest-shv-01-dfw5.facebook.com]
+157.240.19.139 [PTR] [edgeray-wa-group-shv-01-dfw5.facebook.com]
+157.240.19.15 [PTR] [edge-dgw-shv-01-dfw5.facebook.com]
+157.240.19.161 [PTR] [edge-ig-dgw-p42-shv-01-dfw5.facebook.com]
+157.240.19.160 [PTR] [edge-iglite-p42-shv-01-dfw5.facebook.com]
+157.240.19.16 [PTR] [edge-shortwave-shv-01-dfw5.facebook.com]
+157.240.19.168 [PTR] [edge-dgw-p4-shv-01-dfw5.facebook.com]
+157.240.19.142 [PTR] [edge-ig-dgw-shv-01-dfw5.facebook.com]
+157.240.19.167 [PTR] [instagram-p4-new-shv-01-dfw5.fbcdn.net]
+157.240.19.169 [PTR] [edge-z-p4-shv-01-dfw5.facebook.com]
+157.240.19.17 [PTR] [anycast-control-ext-shv-01-dfw5.facebook.com]
+157.240.19.170 [PTR] [edge-mqtt-p4-shv-01-dfw5.facebook.com]
+157.240.19.174 [PTR] [instagram-p42-shv-01-dfw5.fbcdn.net]
+157.240.19.193 [PTR] [metaenterprise-pp-shv-01-dfw5.facebook.com]
+```
+## DNS Probe:
+
+dnsprober allows you to probe a list of (sub)domains based on their DNS response status codes. This feature helps in identifying live domains, misconfigured DNS records, and filtering out unwanted responses. By analyzing DNS status codes like NOERROR, NXDOMAIN, REFUSED, SERVFAIL, etc., you can refine your enumeration results, focusing only on meaningful responses.
+
+This is particularly useful for detecting active subdomains, identifying potential takeovers, and filtering out wildcard responses that could clutter your reconnaissance data.
+
+```console
+subdominator -d facebook.com | dnsprober --dns-code noerror
+
+edge-fwdproxy-4-bgp-01-dfw5.facebook.com [NOERROR]
+edge-star-mini-shv-01-dfw5.facebook.com [NOERROR]
+dohproxy-mobile-shv-01-dfw5.facebook.com [NOERROR]
+anycast-control-mini-shv-01-dfw5.facebook.com [NOERROR]
+edge-dgw-shv-01-dfw5.facebook.com [NOERROR]
+edge-extern-shv-01-dfw5.facebook.com [NOERROR]
+edge-shortwave-shv-01-dfw5.facebook.com [NOERROR]
+edge-iglite-p3-shv-01-dfw5.facebook.com [NOERROR]
+edge-secure-shv-01-dfw5.facebook.com [NOERROR]
+edge-ig-mqtt-shv-01-dfw5.facebook.com [NOERROR]
+edge-fwdproxy-1-bgp-01-dfw5.facebook.com [NOERROR]
+edge-sonar-mini-shv-01-dfw5.fbcdn.net [NOERROR]
+edge-stun-shv-01-dfw5.facebook.com [NOERROR]
+edge-ig-dgw-p42-shv-01-dfw5.facebook.com [NOERROR]
+edge-fwdproxy-5-bgp-01-dfw5.facebook.com [NOERROR]
+edge-dgw-p4-shv-01-dfw5.facebook.com [NOERROR]
+edge-fwdproxy-2-bgp-01-dfw5.facebook.com [NOERROR]
+anycast-control-ext-shv-01-dfw5.facebook.com [NOERROR]
+edge-star-shv-01-dfw5.facebook.com [NOERROR]
+edge-recursor002-bgp-01-dfw5.facebook.com [NOERROR]
+edge-onevc-sip-shv-01-dfw5.facebook.com [NOERROR]
+edge-graph-cert-shv-01-dfw5.facebook.com [NOERROR]
+edge-atlas-shv-01-dfw5.facebook.com [NOERROR]
+edge-recursor001-bgp-01-dfw5.facebook.com [NOERROR]
+dohproxy-shv-01-dfw5.facebook.com [NOERROR]
+edge-fblite-tcp-mini-shv-01-dfw5.facebook.com [NOERROR]
+edge-mqtt-p4-shv-01-dfw5.facebook.com [NOERROR]
+edge-fblite-tcp-p1-shv-01-dfw5.facebook.com [NOERROR]
+```
+## INFO:
+
+### **Built with ❤️ by RevoltSecurities**  
+**dnsprober** is crafted with passion by **RevoltSecurities** for the open-source cybersecurity community. Designed for fast, scalable, and concurrent DNS reconnaissance, this tool empowers security researchers and penetration testers with accurate and efficient domain enumeration.  
+
+Inspired by **[ProjectDiscovery's dnsx](https://github.com/projectdiscovery/dnsx)**, **dnsprober** serves as an **alternative with focused on scalability, wildcard filteration and concurrency**, ensuring high-performance DNS probing without compromising accuracy.  
+
+We believe in the power of **open-source collaboration** and **continuous improvement**. Contributions, feedback, and innovative ideas are always welcome to help make **dnsprober** even better. Join us in shaping the future of cybersecurity tools! 🚀💙  
