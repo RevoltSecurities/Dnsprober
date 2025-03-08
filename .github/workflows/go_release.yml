@@ -1,4 +1,4 @@
-name: Binary and Version Release
+name: Version Release
 
 on:
   push:
@@ -20,12 +20,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Go Environment
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.24.0
+          go-version: 1.21
 
-      - name: Build Binaries
+      - name: Build Binary
         env:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
@@ -57,13 +57,13 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: dist 
+          path: dist  
 
       - name: Upload Assets to Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}  
-          files: dist/**/*.zip  
-          create_release: true  
+          files: dist/**/*.zip 
+          create_release: true 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
