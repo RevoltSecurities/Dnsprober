@@ -1,0 +1,69 @@
+name: Binary and Version Release
+
+on:
+  push:
+    tags:
+      - 'v*' 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64, 386]
+        exclude:
+          - goos: darwin
+            goarch: 386
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go Environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.0
+
+      - name: Build Binaries
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          mkdir -p dist
+          version=${GITHUB_REF_NAME}
+          bin_name="dnsprober_${version}_${GOOS}_${GOARCH}"
+          go build -o dist/$bin_name ./dnsprober  # FIXED: Correct variable name
+          zip -j dist/$bin_name.zip dist/$bin_name
+
+      - name: List Artifacts
+        run: ls -lh dist
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dnsprober_${{ github.ref_name }}_${{ matrix.goos }}_${{ matrix.goarch }}  
+          path: dist/dnsprober_${{ github.ref_name }}_${{ matrix.goos }}_${{ matrix.goarch }}.zip
+
+  release:
+    name: Upload Release Assets
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist 
+
+      - name: Upload Assets to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}  
+          files: dist/**/*.zip  
+          create_release: true  
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
