@@ -400,6 +400,4 @@ edge-fblite-tcp-p1-shv-01-dfw5.facebook.com [NOERROR]
 ### **Built with ❤️ by RevoltSecurities**  
 **dnsprober** is crafted with passion by **RevoltSecurities** for the open-source cybersecurity community. Designed for fast, scalable, and concurrent DNS reconnaissance, this tool empowers security researchers and penetration testers with accurate and efficient domain enumeration.  
 
-Inspired by **[ProjectDiscovery's dnsx](https://github.com/projectdiscovery/dnsx)**, **dnsprober** serves as an **alternative with focused on scalability, wildcard filteration and concurrency**, ensuring high-performance DNS probing without compromising accuracy.  
-
 We believe in the power of **open-source collaboration** and **continuous improvement**. Contributions, feedback, and innovative ideas are always welcome to help make **dnsprober** even better. Join us in shaping the future of cybersecurity tools! 🚀💙  
